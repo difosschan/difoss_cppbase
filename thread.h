@@ -11,12 +11,12 @@ public:
     virtual ~Thread();
 
     DEFINE_ENUM(State,,
-        (UNINITED)      // Î´³õÊ¼»¯µÄ
-        (INITED)        // ³õÊ¼»¯
-        (RUNNING)       // ÕıÔÚÔËĞĞ
-        (PAUSED)        // ÒÑÔİÍ£
-        (STOPPED)       // ÒÑÍ£Ö¹
-        (DEAD)          // ÒÑËÀÍö
+        (UNINITED)      // æœªåˆå§‹åŒ–çš„
+        (INITED)        // åˆå§‹åŒ–
+        (RUNNING)       // æ­£åœ¨è¿è¡Œ
+        (PAUSED)        // å·²æš‚åœ
+        (STOPPED)       // å·²åœæ­¢
+        (DEAD)          // å·²æ­»äº¡
     );
 
     virtual void start();
@@ -26,13 +26,13 @@ public:
 
     int getState();
 
-    // Ìá¹©2ÖÖÉèÖÃÏß³Ì´¦Àíº¯ÊıµÄ·½Ê½£º
+    // æä¾›2ç§è®¾ç½®çº¿ç¨‹å¤„ç†å‡½æ•°çš„æ–¹å¼ï¼š
 public:
-    // 1¡¢C style:ÉèÖÃ»Øµ÷º¯Êı
-    // ÆäÖĞcallback functionµÄ·µ»ØÖµÊÇ0£¬³ÌĞò»á»á²»¶ÏµÄÑ­»·
+    // 1ã€C style:è®¾ç½®å›è°ƒå‡½æ•°
+    // å…¶ä¸­callback functionçš„è¿”å›å€¼æ˜¯0ï¼Œç¨‹åºä¼šä¼šä¸æ–­çš„å¾ªç¯
     thread_callback_t setCallback(thread_callback_t func, void* param);
 protected:
-    // 2¡¢C++ style inheritance:¼Ì³ĞThread²¢override´Ë·½·¨
+    // 2ã€C++ style inheritance:ç»§æ‰¿Threadå¹¶overrideæ­¤æ–¹æ³•
     virtual bool run();
 
 private:

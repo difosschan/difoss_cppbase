@@ -102,7 +102,6 @@ Thread::Thread( bool isPaused /*= false*/ )
 /*virtual*/ Thread::~Thread() {
     TRACE();
     join();
-    // ����״̬����˯�ߵ���������
     while (pthread_cond_destroy(&_cond) == EBUSY)
     {
         pthread_cond_broadcast(&_cond);

@@ -7,7 +7,7 @@ using namespace std;
 
 static const size_t Len_YYYYMMDD_HHmmSS_xxxxxx = sizeof("YYYYMMDD_HHmmSS_xxxxxx") / sizeof(char) - 1;
 static const size_t Len_YYYYMMDD_HHmmss = sizeof("YYYYMMDD:HHmmss") / sizeof(char) - 1;
-// 432000 = 5 * 24 * 60 * 60£¬´óÓÚ5ÄêµÄÊ±¼äÈÏÎªÊÇ¡°Ê±¼ä¡±£¬·ñÔòÈÏÎªÊÇ¡°Ê±¿Ì¡±£¬´Ë¹æ¶¨Ö»ÓÃÓÚ´òÓ¡
+// 432000 = 5 * 24 * 60 * 60ï¼Œå¤§äº5å¹´çš„æ—¶é—´è®¤ä¸ºæ˜¯â€œæ—¶é—´â€ï¼Œå¦åˆ™è®¤ä¸ºæ˜¯â€œæ—¶åˆ»â€ï¼Œæ­¤è§„å®šåªç”¨äºæ‰“å°
 #define DELTA_SEC_MAX 432000
 
 Moment::Moment(time_t sec, suseconds_t usec)
@@ -93,7 +93,7 @@ Moment Moment::operator-( const Moment& other ) const
 
     Moment res(this->_sec - other._sec);
     suseconds_t tmp_usec = static_cast<suseconds_t>(this->_usec) - static_cast<suseconds_t>(other._usec);
-    if (tmp_usec < 0) { // ½èÎ»
+    if (tmp_usec < 0) { // å€Ÿä½
         if (res._sec) {
             --res._sec;
             tmp_usec += USEC_PER_SEC;
@@ -136,20 +136,20 @@ Moment::operator -= (const Moment& other)
 
     if (_sec >= other._sec)
     {
-        // ÔİÊ±´¦ÀíÁË sec ¡£
+        // æš‚æ—¶å¤„ç†äº† sec ã€‚
         _sec -= other._sec;
 
         // usec
-        if (_usec >= other._usec)  // ²»ÓÃ½èÎ»
+        if (_usec >= other._usec)  // ä¸ç”¨å€Ÿä½
             _usec -= other._usec;
         else
         {
-            if (_sec)    // ¦¤sec »¹¿ÉÒÔ½è
+            if (_sec)    // Î”sec è¿˜å¯ä»¥å€Ÿ
             {
                 _sec--;
                 _usec += (USEC_PER_SEC - other._usec);
             }
-            else    // ¦¤sec ²»¹»½è
+            else    // Î”sec ä¸å¤Ÿå€Ÿ
             {
                 _usec = 0;
             }
@@ -173,7 +173,7 @@ Moment::operator += (const Moment& other)
     int64_t tUSec = (*this)._usec;
     tUSec += other._usec;
 
-    if (tSec > (time_t)(-1))    // sec ºÍ Ô½½ç
+    if (tSec > (time_t)(-1))    // sec å’Œ è¶Šç•Œ
     {
         _sec = (time_t)-1;
         _usec = 999999;
@@ -192,7 +192,7 @@ Moment::operator += (const Moment& other)
     return *this;
 }
 
-// ¿ÉÒÔ¸Ä³É³ı·¨ÔËËã·û£¬²»¹ıÖ»¶Ô¦¤ÓĞÒâÒå¡£
+// å¯ä»¥æ”¹æˆé™¤æ³•è¿ç®—ç¬¦ï¼Œä¸è¿‡åªå¯¹Î”æœ‰æ„ä¹‰ã€‚
 void Moment::divide_by(uint32_t piece)
 {
     if (is_null())
@@ -201,11 +201,11 @@ void Moment::divide_by(uint32_t piece)
     if (0 == piece)
         return;
 
-    uint64_t sec_div = _sec / piece;         // ÃëµÄ¿ÉÒÔÕû³ı²¿·Ö
-    uint64_t sec_undiv = _sec % piece;       // ÃëµÄÓàÊı²¿·Ö
-    // ³ı·¨ÔËËãºóµÄ Î¢Ãë = Î¢ÃëµÄ¿ÉÕû³ı²¿·Ö£¨ÓàÊı²¿·ÖÊ¡ÂÔ£© +  ÃëµÄÓàÊı²¿·Ö£¨×ª»»³ÉÎ¢Ãë£© / piece
+    uint64_t sec_div = _sec / piece;         // ç§’çš„å¯ä»¥æ•´é™¤éƒ¨åˆ†
+    uint64_t sec_undiv = _sec % piece;       // ç§’çš„ä½™æ•°éƒ¨åˆ†
+    // é™¤æ³•è¿ç®—åçš„ å¾®ç§’ = å¾®ç§’çš„å¯æ•´é™¤éƒ¨åˆ†ï¼ˆä½™æ•°éƒ¨åˆ†çœç•¥ï¼‰ +  ç§’çš„ä½™æ•°éƒ¨åˆ†ï¼ˆè½¬æ¢æˆå¾®ç§’ï¼‰ / piece
     uint64_t usec_div = static_cast<uint64_t>(_usec / piece) + (sec_undiv * USEC_PER_SEC / piece);
-    sec_div += usec_div / USEC_PER_SEC;     // Î¢ÃëÔËËãºó¿ÉÄÜ»á²úÉú´óÓÚ1ÃëµÄ½á¹û£¬ĞèÒª½øÎ»
+    sec_div += usec_div / USEC_PER_SEC;     // å¾®ç§’è¿ç®—åå¯èƒ½ä¼šäº§ç”Ÿå¤§äº1ç§’çš„ç»“æœï¼Œéœ€è¦è¿›ä½
 
     _sec = sec_div;
     _usec = static_cast<uint32_t>(usec_div % USEC_PER_SEC);

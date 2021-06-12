@@ -15,7 +15,7 @@ using namespace std;
 
 bool Timer::run() {
     EASY_LOCK(_lock);
-    // Ã»ÓĞ¼ÆÊ±ÈÎÎñÊ±£¬Ïß³ÌĞİÃß
+    // æ²¡æœ‰è®¡æ—¶ä»»åŠ¡æ—¶ï¼Œçº¿ç¨‹ä¼‘çœ 
     if (_delays.empty()) {
         pause();
         return true;
@@ -33,13 +33,13 @@ bool Timer::run() {
             COUT(ds_iter->first);
 #endif // _DEBUG
 
-            uint64_t id = ds_iter->second; // ÔÚremoveÇ°°Ñ¶©ÔÄID´æÆğÀ´
+            uint64_t id = ds_iter->second; // åœ¨removeå‰æŠŠè®¢é˜…IDå­˜èµ·æ¥
             ++ds_iter;
-            remove(id);  // NOTE: ds_iter ²»ÄÜÔÙÓÃ£¡
+            remove(id);  // NOTE: ds_iter ä¸èƒ½å†ç”¨ï¼
             this->action(id);
 
         } else {
-            // ·¢ÏÖÃ»µ½Ê±¼äµÄ¶¨Ê±Æ÷ÊÂ¼ş
+            // å‘ç°æ²¡åˆ°æ—¶é—´çš„å®šæ—¶å™¨äº‹ä»¶
             int r = CondVarHelper::Wait(_cond, _lock, alarm);
             if (Thread::STOPPED == _state) {
                 return false;
@@ -78,14 +78,14 @@ bool Timer::add(Moment delay, uint64_t id) {
     Moment now;
     now.now();
 
-    // ¼ÇÂ¼¡¾ÏìÁåÊ±¿Ì¡¿£¬Îª·ÀÖ¹±¾º¯ÊıÖĞµÄÓï¾äÔì³ÉÎó²î¶øÑÓÊ±
+    // è®°å½•ã€å“é“ƒæ—¶åˆ»ã€‘ï¼Œä¸ºé˜²æ­¢æœ¬å‡½æ•°ä¸­çš„è¯­å¥é€ æˆè¯¯å·®è€Œå»¶æ—¶
     Moment alarm = now + delay;
     Moment delay_from_begin = alarm - _begin_time;
 
     // COUT(alarm);
     // COUT(delay_from_begin);
     
-    // ¶©ÔÄ¼ÆÊ±Æ÷µÄid±ØĞëÊÇÎ¨Ò»µÄ
+    // è®¢é˜…è®¡æ—¶å™¨çš„idå¿…é¡»æ˜¯å”¯ä¸€çš„
     if (_sub_ids.find(id) != _sub_ids.end())
         return false;
     
@@ -97,13 +97,13 @@ bool Timer::add(Moment delay, uint64_t id) {
         if (delay_from_begin < min_delay)
             need_settime = true;
     } else {
-        // ½«²åÈëµÚÒ»Ìõ¼ÇÂ¼
+        // å°†æ’å…¥ç¬¬ä¸€æ¡è®°å½•
         need_settime = true;
     }
     
     if (need_settime) {
         struct itimerspec ts;
-        now.now(); // ÔÙ´ÎË¢ĞÂÊ±¼ä£¬ÎªÁË¼õÉÙÎó²î¡£
+        now.now(); // å†æ¬¡åˆ·æ–°æ—¶é—´ï¼Œä¸ºäº†å‡å°‘è¯¯å·®ã€‚
         Moment delay_from_now = alarm - now;
         ts.it_value.tv_sec = ts.it_interval.tv_sec = delay_from_now.sec();
         ts.it_value.tv_nsec = ts.it_interval.tv_nsec = delay_from_now.usec() * 1000;

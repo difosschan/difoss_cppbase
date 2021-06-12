@@ -51,7 +51,7 @@ IniFile::read(const char* section, const char* key, string& value) const {
 
 bool IniFile::do_open(const char* pinipath)
 {
-    // ´ò¿ªÎÄ¼ş
+    // æ‰“å¼€æ–‡ä»¶
     ifstream fin(pinipath);
     if(!fin.is_open())
         return false;
@@ -60,36 +60,36 @@ bool IniFile::do_open(const char* pinipath)
     bool isSkipCurSect = true;
     IniMap_t::iterator curSectIter = _inimap.end();
     
-    // ÖğĞĞ»ñÈ¡²¢½âÊÍ
+    // é€è¡Œè·å–å¹¶è§£é‡Š
     while (!fin.eof()) {
         string one_line;
         getline(fin, one_line);
         StrUtil::TrimSpace(one_line);
-        // ½âÊÍ
+        // è§£é‡Š
         {
-            string cur_sect; // ¼ÇÂ¼µ±Ç°sectionÃû
+            string cur_sect; // è®°å½•å½“å‰sectionå
             
-            // È¥µôĞĞ×¢ÊÍºóÃæµÄÄÚÈİ
-            string str_valid = one_line.substr(0, one_line.find("#"));  // ÓÃ"#"×¢ÊÍ
-            str_valid = str_valid.substr(0, str_valid.find("//"));  // ÓÃ"//"×¢ÊÍ
+            // å»æ‰è¡Œæ³¨é‡Šåé¢çš„å†…å®¹
+            string str_valid = one_line.substr(0, one_line.find("#"));  // ç”¨"#"æ³¨é‡Š
+            str_valid = str_valid.substr(0, str_valid.find("//"));  // ç”¨"//"æ³¨é‡Š
 
-            // ½âÊÍsection
+            // è§£é‡Šsection
             size_t first = str_valid.find('[');
             size_t last  = str_valid.rfind(']');
             
             if (first != string::npos && last != string::npos && first != last+1) {
                 lastSectStr = cur_sect;
-                cur_sect = str_valid.substr(first+1, last-first-1); // È¡³ösectionÃû
+                cur_sect = str_valid.substr(first+1, last-first-1); // å–å‡ºsectionå
                 
                 IniMap_t::iterator dup_sect_iter = _inimap.find(cur_sect);
                 if (false == _dup_section) {
                     if (dup_sect_iter != _inimap.end()) {
-                        // ²»ÔÊĞíÖØ¸´section£¬ÇÒ·¢ÏÖµ±Ç°sectionÒÑ´æÔÚÓÚ_inimapÖĞ¡£
+                        // ä¸å…è®¸é‡å¤sectionï¼Œä¸”å‘ç°å½“å‰sectionå·²å­˜åœ¨äº_inimapä¸­ã€‚
                         isSkipCurSect = true;
                         continue;
                     }
                 }
-                // ÔÊĞíÖØ¸´section£»»òÕßÎ´·¢ÏÖsectionÖØ¸´¡£
+                // å…è®¸é‡å¤sectionï¼›æˆ–è€…æœªå‘ç°sectioné‡å¤ã€‚
                 curSectIter = _inimap.insert(dup_sect_iter, make_pair< Section_t, SectionMap_t >(cur_sect, SectionMap_t()));
                 isSkipCurSect = false;
                 continue;
@@ -103,7 +103,7 @@ bool IniFile::do_open(const char* pinipath)
             if (curSectIter == _inimap.end())
                 continue;
             
-            // ½âÊÍÅäÖÃÏî(key=value)
+            // è§£é‡Šé…ç½®é¡¹(key=value)
             if ((first = str_valid.find('=')) == string::npos)
                 continue;
             
@@ -127,12 +127,12 @@ bool IniFile::do_open(const char* pinipath)
                 continue;
             string value = strtmp2.substr(first, last-first+1);
             
-            // ²åÈëkey,value
+            // æ’å…¥key,value
             SectionMap_t::iterator iter = curSectIter->second.find(key);
             if (false == _dup_key) {
-                // ²»ÔÊĞíÖØ¸´key
+                // ä¸å…è®¸é‡å¤key
                 if (iter != curSectIter->second.end()) {
-                    // µ«keyÖØ¸´ÁË
+                    // ä½†keyé‡å¤äº†
                     continue;
                 }
             }
@@ -140,7 +140,7 @@ bool IniFile::do_open(const char* pinipath)
         }
     }
     
-    // ÖğĞĞ½âÊÍ
+    // é€è¡Œè§£é‡Š
     return !_inimap.empty(); 
 }
 

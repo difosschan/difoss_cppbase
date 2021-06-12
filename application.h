@@ -1,6 +1,6 @@
 #pragma once
-#include <iostream> // µ±ÖĞµÄ static ios_base::Init __ioinit ±ØĞë±»ÉùÃ÷£¬²»È»
-                    // ³ÌĞòÍË³öÊ±»á³öcore£¨libg++µÄÈ±Ïİ£©¡£
+#include <iostream> // å½“ä¸­çš„ static ios_base::Init __ioinit å¿…é¡»è¢«å£°æ˜ï¼Œä¸ç„¶
+                    // ç¨‹åºé€€å‡ºæ—¶ä¼šå‡ºcoreï¼ˆlibg++çš„ç¼ºé™·ï¼‰ã€‚
 #include <string>
 #include <signal.h>
 #include <vector>
@@ -22,13 +22,13 @@ public:
     virtual bool init(int argc, char* argv[]);
     virtual void run() {}
 
-    // @note »ñÈ¡Ïß³ÌID
+    // @note è·å–çº¿ç¨‹ID
     static long gettid();
 
-    // @note »ñÈ¡½ø³ÌID
+    // @note è·å–è¿›ç¨‹ID
     static int getpid();
 
-    // @note »ñÈ¡¸¸½ø³Ì½ø³ÌID
+    // @note è·å–çˆ¶è¿›ç¨‹è¿›ç¨‹ID
     static int getppid();
 
     static unsigned int sleep(unsigned int seconds);
@@ -36,24 +36,24 @@ public:
     typedef void (*SigAction_t)(int, struct siginfo *, void *);
     typedef void (*SigHandler_t)(int);
     
-    // @note ´Ëº¯Êı²¢·ÇÕæÕı×¢²áĞÅºÅ´¦Àí£¬Ö»ÊÇÔÚĞÅºÅ´¥·¢Ê±£¬@param func»á±»»Øµ÷
+    // @note æ­¤å‡½æ•°å¹¶éçœŸæ­£æ³¨å†Œä¿¡å·å¤„ç†ï¼Œåªæ˜¯åœ¨ä¿¡å·è§¦å‘æ—¶ï¼Œ@param funcä¼šè¢«å›è°ƒ
     static bool reg_sig(int sig, SigHandler_t func, bool repeat = false);
     
-    // @note ÕæÕıµ÷ÓÃ sigaction() ½øĞĞĞÅºÅ´¦Àíº¯ÊıµÄÌæ»»
+    // @note çœŸæ­£è°ƒç”¨ sigaction() è¿›è¡Œä¿¡å·å¤„ç†å‡½æ•°çš„æ›¿æ¢
     static bool reg_sig(int sig, const struct sigaction& act, struct sigaction* old_act = NULL);
 
     static std::string my_getline();
 
     //////////////////////////////////////////////////////////////////////////
-    // Ìá¹©¼òµ¥µÄĞÅºÅ´¥·¢±êÇ©¼ÇÂ¼
+    // æä¾›ç®€å•çš„ä¿¡å·è§¦å‘æ ‡ç­¾è®°å½•
     
-    // ×¢²á£¬repeat²ÎÊıÈÃĞÅºÅ´¦Àíº¯ÊıÊÇ·ñÔÚ´¥·¢ºóÔÙ´Î×¢²á×Ô¼º
+    // æ³¨å†Œï¼Œrepeatå‚æ•°è®©ä¿¡å·å¤„ç†å‡½æ•°æ˜¯å¦åœ¨è§¦å‘åå†æ¬¡æ³¨å†Œè‡ªå·±
     static void register_signal_flag(int sig_no, bool repeat = false);
-    // ĞÅºÅÊÇ·ñÊÕµ½
+    // ä¿¡å·æ˜¯å¦æ”¶åˆ°
     static bool check_signal_flag(int sig_no);
-    // ÖØÖÃĞÅºÅ¶ÔÓ¦µÄ±êÖ¾
+    // é‡ç½®ä¿¡å·å¯¹åº”çš„æ ‡å¿—
     static void reset_signal_flag(int sig_no, bool value = false);
-    // ÉèÖÃ½ÓÊÕµ½ĞÅºÅºóÊÇ·ñ´òÓ¡
+    // è®¾ç½®æ¥æ”¶åˆ°ä¿¡å·åæ˜¯å¦æ‰“å°
     static void set_is_output(bool b);
 
     static void daemon();  // change into reception mode.

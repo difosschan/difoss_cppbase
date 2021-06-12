@@ -47,7 +47,7 @@ Mutex::Helper::Helper(pthread_mutex_t& lock)
 /* virtual */
 Mutex::Helper::~Helper()
 {
-    // Á½¸öÖ¸ÕëµÄµ¥Ò»ÐÔÓÉ¹¹Ôìº¯Êý±£Ö¤¡£
+    // ä¸¤ä¸ªæŒ‡é’ˆçš„å•ä¸€æ€§ç”±æž„é€ å‡½æ•°ä¿è¯ã€‚
     if (_pMutex)
         _pMutex->unlock();
     else if(_pMtx)

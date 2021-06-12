@@ -26,15 +26,15 @@ public:
     bool operator <= (const Moment& other) const {return !(*this > other);}
     bool operator >= (const Moment& other) const {return !(*this < other);}
 
-    /* ×¢Òâ£ºµ±¡°±»¼õÊý¡±Ð¡ÓÚµÈÓÚ¡°¼õÊý¡±£¬¶¼»áµ¼ÖÂ·µ»ØµÄMomentÖµ±»ÖÃ0¡£*/
+    /* æ³¨æ„ï¼šå½“â€œè¢«å‡æ•°â€å°äºŽç­‰äºŽâ€œå‡æ•°â€ï¼Œéƒ½ä¼šå¯¼è‡´è¿”å›žçš„Momentå€¼è¢«ç½®0ã€‚*/
     Moment operator - (const Moment& other) const;
     Moment operator + (const Moment& other) const;
 
-    // ÔÝÊ±Ö»Ö§³ÖÍ¬Ò»Ê±Çø±È½Ï¡£
+    // æš‚æ—¶åªæ”¯æŒåŒä¸€æ—¶åŒºæ¯”è¾ƒã€‚
     Moment& operator -= (const Moment& other);
     Moment& operator += (const Moment& other);
 
-    // ¸ÄÔËËãÖ»¶Ô¦¤ÓÐÒâÒå¡£
+    // æ”¹è¿ç®—åªå¯¹Î”æœ‰æ„ä¹‰ã€‚
     void divide_by(uint32_t piece);
 
     bool convertToMilliSeccond(uint32_t& msec) const;

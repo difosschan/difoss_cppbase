@@ -10,7 +10,7 @@ RuntimeException::RuntimeException(const std::string& reason, int errCode,
 , _line(line)
 {}
 
-// \note ¶àÏß³Ì¾²Ì¬¾Ö²¿±äÁ¿»áÓĞÎÊÌâ
+// \note å¤šçº¿ç¨‹é™æ€å±€éƒ¨å˜é‡ä¼šæœ‰é—®é¢˜
 const char* RuntimeException::what() const throw() {
     static std::string str;
     str = "Error Code: ";

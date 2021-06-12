@@ -8,12 +8,12 @@ class Mutex
 public:
 
     //////////////////////////////////////////////////////////////////////////
-    // Mutex::Attribute ÊôĞÔÉèÖÃ
+    // Mutex::Attribute å±æ€§è®¾ç½®
     typedef enum {
-        TIMED = 0,      // ÆÕÍ¨Ëø¡£
-        RECURSIVE = 1,  // Ç¶Ì×Ëø£¬ÔÊĞíÍ¬Ò»¸öÏß³Ì¶ÔÍ¬Ò»¸öËø³É¹¦»ñµÃ¶à´Î£¬²¢Í¨¹ı¶à´Îunlock½âËø¡£
-        ERRORCHECK = 2, // ¼ì´íËø£¬Í¬Ò»Ïß³ÌÒ²Ö»ÄÜÉêÇëÒ»´ÎËø¡£
-        ADAPTIVE = 3    // ÊÊÓ¦Ëø£¬½öµÈ´ı½âËøºóÖØĞÂ¾ºÕù¡£
+        TIMED = 0,      // æ™®é€šé”ã€‚
+        RECURSIVE = 1,  // åµŒå¥—é”ï¼Œå…è®¸åŒä¸€ä¸ªçº¿ç¨‹å¯¹åŒä¸€ä¸ªé”æˆåŠŸè·å¾—å¤šæ¬¡ï¼Œå¹¶é€šè¿‡å¤šæ¬¡unlockè§£é”ã€‚
+        ERRORCHECK = 2, // æ£€é”™é”ï¼ŒåŒä¸€çº¿ç¨‹ä¹Ÿåªèƒ½ç”³è¯·ä¸€æ¬¡é”ã€‚
+        ADAPTIVE = 3    // é€‚åº”é”ï¼Œä»…ç­‰å¾…è§£é”åé‡æ–°ç«äº‰ã€‚
     } Type;
 
     Mutex(Mutex::Type type = Mutex::TIMED);
@@ -31,17 +31,17 @@ private:
 public:
     
     //////////////////////////////////////////////////////////////////////////
-    // Mutex::Helper ×÷ÓÃ£º¸¨×ô Mutex ºÍ pthread_mutex_t µÄÊ¹ÓÃ
+    // Mutex::Helper ä½œç”¨ï¼šè¾…ä½ Mutex å’Œ pthread_mutex_t çš„ä½¿ç”¨
     class Helper
     {
     public:
-        // °ïÖúÔÚº¯ÊıÍË³öÊ±½âËø¡£
+        // å¸®åŠ©åœ¨å‡½æ•°é€€å‡ºæ—¶è§£é”ã€‚
         Helper(Mutex& lock);
         Helper(pthread_mutex_t& lock);
         virtual ~Helper();
 
     public:
-        // °ïÖúpthread_mutex_tµÄ³õÊ¼»¯¡£
+        // å¸®åŠ©pthread_mutex_tçš„åˆå§‹åŒ–ã€‚
         static void init(pthread_mutex_t& lock, Mutex::Type type = Mutex::TIMED);
         static void destroy(pthread_mutex_t& lock);
 

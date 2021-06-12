@@ -27,7 +27,7 @@ using namespace std;
 
 bool Application::_IsSigOutput = true;
 Application::SignalMap_t Application::_SignalsMap;
- 
+
 Application::Application()
 : _argc(0), _argv(NULL) {}
 
@@ -95,7 +95,7 @@ void Application::daemon() {
             perror("dup2 stderr");
             return;
         }
-    
+
         if (fd > STDERR_FILENO) {
             if(close(fd) < 0) {
                 perror("close");
@@ -107,40 +107,35 @@ void Application::daemon() {
 }
 
 bool Application::reg_sig(int sig, SigHandler_t func, bool repeat /* = false */) {
-    
+
 #ifdef _DEBUG
     cout << "in Application::reg_sig() parameters as follow:" << endl;
     COUT(sig);
     SEE_ADDRESS_64_PTR(func);
     COUT(repeat);
 #endif // _DEBUG
-    
-    // �Ȳ��Ҹ��ź��Ƿ���ע��
+
     SignalMap_t::iterator iter = _SignalsMap.find(sig);
     if (_SignalsMap.find(sig) == _SignalsMap.end()) {
 #ifdef _DEBUG
         cout << "first time to regisetr signal(" << sig << ")." << endl;
 #endif // _DEBUG
-        // δע�ᣬʹ��Application�ڲ����źű�Ǻ�������g_signal_handle����ռע���źš�
         register_signal_flag(sig, repeat);
     }
-    
+
     struct sigaction act;
     memset(&act, 0, sizeof(struct sigaction));
     act.sa_handler = func;
-    // �����Ҫע�ᴦ�����źŵĺ�����ֻ�ᱻ���뵽 actions �У�
-    // ��Ȼ���ظ�ע��Ĵ������������ᱻ�������������ε��ã�ֱ�ӷ��� true ����
     size_t actions_size = iter->second.actions.size();
-    size_t i = 0; 
+    size_t i = 0;
     for (;i < actions_size; ++i) {
         if ((iter->second.actions)[i].sa_handler == func)
             break;
     }
     if (i == actions_size) {
-        // @param func ���� actions �У����ӽ���actions������� sigaction ע�ᣬ��ֹ����ˢ��
         iter->second.actions.push_back(act);
     }
-    
+
     return true;
 }
 
@@ -166,8 +161,6 @@ unsigned int Application::sleep( unsigned int seconds )
 #endif // _MSC_VER
 }
 
-// ����<string>�ṩ��getline�ڳ�������źź���쳣��Ӧ��
-// ���mysql 5.6.15 Դ���Լ�дʵ��һ������scanf("%c")��getline��
 std::string Application::my_getline()
 {
     std::string result;
@@ -187,7 +180,6 @@ void Application::g_signal_handle(int sig_no) {
             Application::gettid(), sig_no);
     Application::SignalMap_t::iterator iter = _SignalsMap.find(sig_no);
     if (iter != _SignalsMap.end()) {
-        // �ص����� Application::register_signal_flag() �ӿڰ�װ���źŴ�������
         size_t size = iter->second.actions.size();
         for (size_t i = 0; i < size; ++i) {
             struct sigaction& old_act = iter->second.actions[i];
@@ -208,26 +200,26 @@ void Application::g_signal_handle(int sig_no) {
 void Application::register_signal_flag(int sig_no, bool repeat /* = false */) {
     if (_SignalsMap.find(sig_no) != _SignalsMap.end())
         return;
-    
+
     struct sigaction act, old_act;
     memset(&act, 0, sizeof(struct sigaction));
     memset(&old_act, 0, sizeof(struct sigaction));
     act.sa_handler = g_signal_handle;
     act.sa_flags = 0;
     sigemptyset(&act.sa_mask);
-    
+
     if (sigaction(sig_no, &act, &old_act) < 0) {
         perror("install signal (sa_handler) error");
         return;
     }
-    
+
     struct SignalInfo_t si;
     si.flag = false;
     si.repeat = repeat;
     si.actions.push_back(old_act);
     si.actions.push_back(act);
     _SignalsMap.insert(make_pair(sig_no, si));
-    
+
 #ifdef _DEBUG
     SignalMap_t::iterator iter = _SignalsMap.find(sig_no);
     if (iter != _SignalsMap.end()) {
