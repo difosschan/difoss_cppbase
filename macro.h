@@ -128,7 +128,7 @@ extern "C" {
 
 //////////////////////////////////////////////////////////////////////////
 // check the return value of C++ statement calling.
-#include "specialprint.h"
+#include "special_print.h"
 
 #define CALLING_OK()        std::cout << "[ " << text_format_fg("OK", FG_GREEN) << " ]" << END_COLOR
 #define CALLING_FAILED()    std::cout << "[ " << text_format_fg("FAILED", FG_RED) << " ]" << END_COLOR
@@ -157,14 +157,14 @@ std::string FormatString(T v)
 #define GET_STL_STRING_TO_CHAR_PTR(_str_) (&*(_str).begin())
 //////////////////////////////////////////////////////////////////////////
 // use some boost character.
-#if defined (NO_BOOST)
+#if !defined (BOOST_PP_CAT)
 // It works at centos 5.2.
 #    define BOOST_PP_CAT(a, b) BOOST_PP_CAT_I(a, b)
 #    define BOOST_PP_CAT_I(a, b) BOOST_PP_CAT_II(a ## b)
 #    define BOOST_PP_CAT_II(res) res
 #else
 #   include <boost/preprocessor/cat.hpp>
-#endif // BOOST_ROOT or BOOST_HOME
+#endif
 
 //////////////////////////////////////////////////////////////////////////
 #define SEC_PER_DAY 86400   // =60*60*24

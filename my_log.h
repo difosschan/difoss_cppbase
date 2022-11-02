@@ -14,7 +14,7 @@
 #include <pthread.h>
 #include "design_patterns/singleton.h"
 //-----------------------------------------------------------------------------
-// ×¢Òâ£º´ËÈÕÖ¾ÀàÏß³Ì°²È«
+// æ³¨æ„ï¼šæ­¤æ—¥å¿—ç±»çº¿ç¨‹å®‰å…¨
 //-----------------------------------------------------------------------------
 
 #ifndef g_log
@@ -57,7 +57,7 @@
 #endif // _NO_MY_LOG_
 
 //-----------------------------------------------------------------------------
-// ÈÕÖ¾µ¥¸öÎÄ¼ş×î´ó¼ÇÂ¼Êı
+// æ—¥å¿—å•ä¸ªæ–‡ä»¶æœ€å¤§è®°å½•æ•°
 #define MY_LOG_SIZE        1000000
 
 //-----------------------------------------------------------------------------
@@ -108,9 +108,9 @@ public:
     FILE *logOpen(const char *name);
     void logClose(bool bRename = true);
 
-    //void log(const char *format, ...); // Ğ´ÈÕÖ¾ºÍÖÕ¶Ë
-    void log1(const char *format, ...); //Ğ´ÈÕÖ¾
-    void log2(const char *format, ...); //Ğ´ÖÕ¶Ë
+    //void log(const char *format, ...); // å†™æ—¥å¿—å’Œç»ˆç«¯
+    void log1(const char *format, ...); //å†™æ—¥å¿—
+    void log2(const char *format, ...); //å†™ç»ˆç«¯
     
     void setConditional(int le, int li, const char * f);    
     void setLevelClass(int le_fl, int le_tm);    
