@@ -1,103 +1,49 @@
 #include "bit_util.h"
 #include "macro.h"
 
-void BitUtil::ChexDump(const char* buff, size_t len, FILE* file)
-{
-    if (buff == NULL) {
-        fprintf(file, "(BitUtil::ChexDump nothing cuz buff = NULL)\n");
-        return;
-    }
-    if (len == 0) {
-        fprintf(file, "(BitUtil::ChexDump nothing cuz len = 0)\n");
-        return;
-    }
+using namespace std;
 
-    size_t i = 0;
-    for(; i < len; ++i)
-    {
-        if (i != 0 && i % 16 == 0) 
-        {
-            fprintf(file, "   ");
-            for(size_t j = static_cast<size_t>(i - 16); j < i; ++j) {
-                int buff_j = buff[j];
-                if (buff_j > 31 && buff_j < 128)
-                    fprintf(file, "%c", static_cast<char>(buff[j]));
-                else
-                    fprintf(file, ".");
+namespace BitUtil {
+
+    void DumpHex(const char *bs, size_t bsLen, ostream &os, size_t pl) {
+        if (bs == nullptr || pl == 0) {
+            return;
+        }
+        os << "(len=" << bsLen << ")\n";
+        int lineCnt = (bsLen + pl - 1) / pl;
+        char tmp[8] = {0};
+        for (auto i = 0; i < lineCnt; ++i) {
+            string hexStr, visStr;
+            for (size_t j = 0; j < pl; ++j) {
+                size_t chIdx = i * pl + j;
+                bool isIn = chIdx < bsLen;
+                char ch = isIn ? bs[chIdx] : ' ';
+                if (isIn) {
+                    snprintf(tmp, sizeof(tmp), "%02X ", ch & 0xFF);
+                    hexStr += tmp;
+                    visStr += IsByteVisible(ch) ? ch : '.';
+                } else {
+                    hexStr += "   ";
+                    visStr += " ";
+                }
             }
-            fprintf(file, "\n");
+            os << hexStr << " " << visStr.substr(0, visStr.size() - 1) << endl;
         }
 
-        fprintf(file, "%02X ", (buff[i]) & 0xFF);
-    }
-
-    // the last line:
-    // fill with blackspace to indent in last line.
-    for (size_t j = i % 16; j < 16; ++j) {
-        fprintf(file, "   ");
-    }
-    fprintf(file, "  ");
-    for(size_t j = i % 16 ? i - i % 16 : i - 16 ; j < i; ++j) {
-        int buff_j = buff[j];
-        if (buff_j > 31 && buff_j < 128)
-            fprintf(file, "%c", static_cast<char>(buff[j]));
-        else
-            fprintf(file, ".");
-    }
-
-    fprintf(file, "\n");
-    fflush(file);
-}
-
-void BitUtil::HexDump(const char* buff, size_t len, std::ostream& os)
-{
-    if (buff == NULL) {
-        os << "(BitUtil::HexDump nothing cuz buff = NULL)\n";
-        return;
-    }
-    if(len == 0) {
-        os << "(BitUtil::HexDump nothing cuz len = 0)\n";
         return;
     }
 
-    size_t i = 0;
-    for(; i < len; ++i)
-    {
-        if(i != 0 && i % 16 == 0)
-        {
-            os << "  ";
-            for(size_t j = static_cast<size_t>(i - 16); j < i; ++j) {
-                int buff_j = buff[j];
-                if (buff_j > 31 && buff_j < 128)
-                    os << static_cast<char>(buff[j]);
-                else
-                    os << ".";
-            }
-            os << "\n";
-        }
-        os.width(2);
-        os.fill('0');
-        
-        os <<  std::hex << std::uppercase << int(buff[i] & 0xFF) << std::nouppercase << std::dec << ' ' ;
-    }
-    // the last line:
-    // fill with blackspace to indent in last line.
-    for (size_t j = i % 16; j < 16; ++j) {
-        os << "   ";
+    string DumpHex(const char *bs, size_t bsLen, size_t pl) {
+        stringstream ss;
+        DumpHex(bs, bsLen, ss, pl);
+        return ss.str();
     }
 
-    os.fill(' ');
-    
-    os << "  ";
-    for(size_t j = i % 16 ? i - i % 16 : i - 16 ; j < i; ++j) {
-        int buff_j = buff[j];
-        if (buff_j > 31 && buff_j < 128)
-            os << static_cast<char>(buff[j]);
-        else
-            os << ".";
+    std::string DumpHex(const string& data, size_t pl) {
+        return DumpHex(data.data(), data.length(), pl);
     }
 
-    os << "\n";
-    std::flush(os);
+    bool IsByteVisible(char c) {
+        return c > 31 && c < 127;
+    }
 }
-
